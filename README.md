@@ -6,8 +6,7 @@ A modular Prometheus exporter for FreeBSD metrics, built with Go. This project p
 
 - `main.go`: The entry point that sets up the HTTP server and registers collectors.
 - `fbsd_node_exporter/collector.go`: Defines the base `NodeCollector` interface that all collectors must implement.
-- `fbsd_node_exporter/cpu_collector.go`: Implements the aggregate CPU usage collector using `gopsutil`.
-- `fbsd_node_exporter/cpu_core_collector.go`: Implements the per-core CPU usage collector using `gopsutil`.
+- `fbsd_node_exporter/cpu_core_collector.go`: Implements the CPU usage collector (per-core and aggregate) using `gopsutil`.
 - `fbsd_node_exporter/mem_collector.go`: Implements the Memory usage collector using `gopsutil`.
 
 ## Configuration

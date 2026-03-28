@@ -29,14 +29,13 @@ func main() {
 
 	// Initialize hardware-specific collectors.
 	// These are modular; more can be added easily by following the NodeCollector interface.
-	cpuCollector := fbsd_node_exporter.NewCPUCollector(namespace)
-	cpuCoreCollector := fbsd_node_exporter.NewCPUCoreCollector(namespace)
+	// cpuCollector now handles both per-core and aggregate metrics.
+	cpuCollector := fbsd_node_exporter.NewCPUCollector()
 	memCollector := fbsd_node_exporter.NewMemoryCollector(namespace)
 
 	// Register the collectors with our custom registry.
 	// MustRegister will panic if there's an error (e.g., duplicate metric names).
 	reg.MustRegister(cpuCollector)
-	reg.MustRegister(cpuCoreCollector)
 	reg.MustRegister(memCollector)
 
 	// Set up the /metrics endpoint using the registry we created.
