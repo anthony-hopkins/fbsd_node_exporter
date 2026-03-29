@@ -14,10 +14,10 @@ type CPUCollector struct {
 func NewCPUCollector() *CPUCollector {
 	return &CPUCollector{
 		usageDesc: prometheus.NewDesc(
-			"node_cpu_usage_percent",
+			"CPU_core_usage",
 			"CPU usage percent per core",
-			[]string{"core"}, // label
-			nil,
+			[]string{"core"}, // ONLY core label
+			nil,              // no constant labels
 		),
 	}
 }
@@ -27,7 +27,6 @@ func (c *CPUCollector) Describe(ch chan<- *prometheus.Desc) {
 }
 
 func (c *CPUCollector) Collect(ch chan<- prometheus.Metric) {
-	// true = per-core usage
 	usages, err := cpu.Percent(0, true)
 	if err != nil {
 		return
@@ -39,7 +38,7 @@ func (c *CPUCollector) Collect(ch chan<- prometheus.Metric) {
 		ch <- prometheus.MustNewConstMetric(
 			c.usageDesc,
 			prometheus.GaugeValue,
-			u,
+			u/100.0, // convert 0–100 → 0.0–1.0
 			coreLabel,
 		)
 	}

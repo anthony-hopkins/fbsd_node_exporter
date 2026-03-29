@@ -21,7 +21,7 @@ func main() {
 
 	// The address the HTTP server will bind to.
 	// It can be overridden via the EXPORTER_ADDR environment variable.
-	addr := envOrDefault("EXPORTER_ADDR", ":9100")
+	addr := envOrDefault("EXPORTER_ADDR", ":3000")
 
 	// Create a new, non-global Prometheus registry.
 	// Using a custom registry is often cleaner than the default global one.
@@ -31,12 +31,16 @@ func main() {
 	// These are modular; more can be added easily by following the NodeCollector interface.
 	// cpuCollector now handles both per-core and aggregate metrics.
 	cpuCollector := fbsd_node_exporter.NewCPUCollector()
-	memCollector := fbsd_node_exporter.NewMemoryCollector(namespace)
+	memCollector := fbsd_node_exporter.NewMemoryCollector()
+	diskCollector := fbsd_node_exporter.NewDiskUsageCollector()
+	zfsCollector := fbsd_node_exporter.NewZFSPoolCollector()
 
 	// Register the collectors with our custom registry.
 	// MustRegister will panic if there's an error (e.g., duplicate metric names).
 	reg.MustRegister(cpuCollector)
 	reg.MustRegister(memCollector)
+	reg.MustRegister(diskCollector)
+	reg.MustRegister(zfsCollector)
 
 	// Set up the /metrics endpoint using the registry we created.
 	// promhttp.HandlerFor provides an HTTP handler that scrapes our registry.
