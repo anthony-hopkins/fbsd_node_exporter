@@ -8,13 +8,15 @@ A modular Prometheus exporter for FreeBSD metrics, built with Go. This project p
 - `fbsd_node_exporter/collector.go`: Defines the base `NodeCollector` interface that all collectors must implement.
 - `fbsd_node_exporter/cpu_core_collector.go`: Implements the CPU usage collector (per-core and aggregate) using `gopsutil`.
 - `fbsd_node_exporter/mem_collector.go`: Implements the Memory usage collector using `gopsutil`.
+- `fbsd_node_exporter/filesystem_freebsd_collector.go`: Implements the Disk usage collector using `getfsstat(2)` and `mount(8)`.
+- `fbsd_node_exporter/zfs_pools_collector.go`: Implements the ZFS pool collector using `zpool(8)`.
 
 ## Configuration
 
 The exporter can be configured via environment variables:
 
-- `EXPORTER_NAMESPACE`: The prefix for all exported metrics (default: `mini_node`).
-- `EXPORTER_ADDR`: The address and port to listen on (default: `:91001`).
+- `EXPORTER_NAMESPACE`: The prefix for all exported metrics (default: `DHS_`).
+- `EXPORTER_ADDR`: The address and port to listen on (default: `:3000`).
 
 ## How to Implement More Collectors
 
@@ -93,4 +95,4 @@ go build -o fbsd_node_exporter
 ./fbsd_node_exporter
 ```
 
-You can then view the metrics at `http://localhost:9100/metrics`.
+You can then view the metrics at `http://localhost:3000/metrics`.
